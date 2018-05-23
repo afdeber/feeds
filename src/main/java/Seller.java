@@ -1,6 +1,12 @@
+import java.time.LocalDateTime;
+
 public class Seller {
     public SingleSell sells(Item item, Shipment shipment) {
-        return new SingleSell(item, shipment);
+        return sells(item, shipment, LocalDateTime.now());
+    }
+
+    public SingleSell sells(Item item, Shipment shipment, LocalDateTime sellingDate) {
+        return new SingleSell(item, shipment, sellingDate);
     }
 
     public PartialSell sells(Item item) {

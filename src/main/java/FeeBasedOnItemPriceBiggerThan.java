@@ -11,7 +11,7 @@ public class FeeBasedOnItemPriceBiggerThan implements  Rival {
 
     @Override
     public Fee calculate() {
-        Fee accumulated = item.acumulateFee( shipment);
+        Fee accumulated = item.accumulateFee( shipment);
         return accumulated.percentage(2.0);
     }
 

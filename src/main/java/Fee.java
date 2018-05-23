@@ -15,4 +15,7 @@ public class Fee {
         return new Fee(this.value * percentage / 100 );
     }
 
+    public Fee plus(Fee fee) {
+        return new Fee(this.value + fee.value);
+    }
 }

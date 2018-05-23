@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 
 public class PartialSell implements Sell {
 
@@ -22,6 +23,11 @@ public class PartialSell implements Sell {
     @Override
     public Cost cost() {
         return this.defaultSell.cost();
+    }
+
+    @Override
+    public LocalDateTime sellingDate() {
+        return this.sellCached.sellingDate();
     }
 
     public PartialSell and(Item item) {

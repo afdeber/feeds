@@ -1,25 +1,38 @@
 import calendar.BlackDaysCalendar;
 import calendar.NoneCalendar;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
 public class SingleSell implements Sell {
     private final Item item;
     private final Shipment shipment;
+    private final LocalDateTime sellingDate;
 
     public SingleSell(Item item, Shipment shipment) {
-        this.item = item;
-        this.shipment = shipment;
+        this(item, shipment, LocalDateTime.now());
     }
 
+    public SingleSell(Item item, Shipment shipment, LocalDateTime sellingDate) {
+        this.item = item;
+        this.shipment = shipment;
+        this.sellingDate = sellingDate;
+    }
+
+    @Override
+    public LocalDateTime sellingDate() {
+        return sellingDate;
+    }
+
+    @Override
     public Fee fee() {
         return this.fee(new NoneCalendar());
     }
 
     @Override
     public Cost cost() {
-        return item.acumulateCost(shipment);
+        return item.accumulateCost(shipment);
     }
 
     public Fee fee(BlackDaysCalendar calendar) {

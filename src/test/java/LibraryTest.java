@@ -4,7 +4,6 @@
 import calendar.BlackDaysCalendar;
 import org.junit.Test;
 
-
 import static org.junit.Assert.*;
 
 public class LibraryTest {
@@ -14,38 +13,34 @@ public class LibraryTest {
         SingleSell s = seller.sells( new Item(100.0), new Shipment(100.0) );
 
         assertEquals(new Fee(7.0), s.fee() );
-
     }
 
     @Test
-    public void seller_sells_item_with_shipping_different_mount_its_fee_is_percentage_3_point_5() {
+    public void seller_sells_item_with_shipping_different_amount_its_fee_is_percentage_3_point_5() {
         Seller seller = new Seller();
         SingleSell s = seller.sells( new Item(200.0), new Shipment(200.0) );
 
         assertEquals(new Fee(14.0), s.fee() );
-
     }
 
     @Test
-    public void seller_sells_item_which_price_is_bigger_than_1000_it_is_charged_based_on_item_value_by_percentage_2() {
+    public void seller_sells_item_which_price_is_bigger_than_1000_is_charged_based_on_item_value_by_percentage_2() {
         Seller seller = new Seller();
         SingleSell s = seller.sells( new Item(1000.0), new Shipment(200.0) );
 
         assertEquals(new Fee(24.0), s.fee() );
-
     }
 
     @Test
-    public void seller_sells_item_durring_black_friday_it_is_charged_considering_item_value_only() {
+    public void seller_sells_item_durring_black_friday_is_charged_considering_item_value_only() {
         Seller seller = new Seller();
         SingleSell s = seller.sells( new Item(1000.0), new Shipment(200.0) );
 
         assertEquals( new Fee(35.0), s.fee( new BlackDaysCalendar() ) );
-
     }
 
     @Test
-    public void seller_sells_item_and_it_is_charged_after_four_items_and_it_is_charged_considering_first_item_value_only() {
+    public void seller_sells_item_and_it_is_charged_after_four_items_and_is_charged_considering_first_item_value_only() {
         Seller seller = new Seller();
         Sell s = seller.sells( new Item(200.0) )
                 .and( new Item(1000.0) )
@@ -54,21 +49,19 @@ public class LibraryTest {
                 .close();
 
         assertEquals(s.fee(), new Fee(7.0));
-
     }
 
     @Test
-    public void seller_sells_item_and_it_is_charged_after_four_items_and_it_is_charged_zero_whether_sell_is_not_close() {
+    public void seller_sells_item_and_it_is_charged_after_four_items_and_is_charged_zero_whether_sell_is_not_close() {
         Seller seller = new Seller();
         Sell s = seller.sells( new Item(200.0) )
                 .and( new Item(1000.0) );
 
         assertEquals(s.fee(), new Fee(0.0));
-
     }
 
     @Test
-    public void seller_sells_item_and_it_is_charged_after_four_shipped_items_and_it_is_charged_considering_first_item_value_only() {
+    public void seller_sells_item_and_it_is_charged_after_four_shipped_items_and_is_charged_considering_first_item_value_only() {
         Seller seller = new Seller();
         Sell s = seller.sells( new Item(200.0), new Shipment(200.0) )
                 .and( new Item(1000.0) )
@@ -77,6 +70,20 @@ public class LibraryTest {
                 .close();
 
         assertEquals(s.fee(), new Fee(14.0));
+    }
 
+    @Test
+    public void seller_does_2_sells_between_2_hours_and_is_charged_5_percent_less_each() {
+        Seller seller = new Seller();
+        Sell s1 = seller.sells(new Item(200.0), new Shipment(200.0));
+        Sell s2 = seller.sells(new Item(300.0), new Shipment(200.0), s1.sellingDate().plusHours(1).plusMinutes(21));
+
+        Promotion p = new Promotion(1L, 5.0, s1, s2);
+
+        Fee f1 = p.fee();
+        Fee f2 = new Fee(31.5).percentage(95.0);
+
+
+        assertEquals(f1, f2);
     }
 }

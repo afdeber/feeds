@@ -5,7 +5,7 @@ public class Shipment {
         this.cost = cost;
     }
 
-    public Cost acumulateCostHere(Double result) {
+    public Cost accumulateCostHere(Double result) {
         return new Cost( result += this.cost );
     }
 }

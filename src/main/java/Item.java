@@ -1,5 +1,3 @@
-import java.nio.DoubleBuffer;
-
 public class Item {
     private final Double cost;
 
@@ -7,8 +5,8 @@ public class Item {
         this.cost = cost;
     }
 
-    public Fee acumulateFee(Shipment shipment) {
-        return this.acumulateCost(shipment).asFee();
+    public Fee accumulateFee(Shipment shipment) {
+        return this.accumulateCost(shipment).asFee();
 
     }
 
@@ -20,8 +18,8 @@ public class Item {
         return this.cost >= value;
     }
 
-    public Cost acumulateCost(Shipment shipment) {
+    public Cost accumulateCost(Shipment shipment) {
         Double result = this.cost;
-        return shipment.acumulateCostHere(result);
+        return shipment.accumulateCostHere(result);
     }
 }
