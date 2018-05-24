@@ -7,7 +7,7 @@ public class Fee {
 
     @Override
     public boolean equals(Object other) {
-        Fee another = (Fee)other;
+        Fee another = (Fee) other;
         return this.value.equals(another.value);
     }
 
@@ -15,7 +15,5 @@ public class Fee {
         return new Fee(this.value * percentage / 100 );
     }
 
-    public Fee plus(Fee fee) {
-        return new Fee(this.value + fee.value);
-    }
+    public Fee plus(Fee fee) { return new Fee(this.value + fee.value); }
 }

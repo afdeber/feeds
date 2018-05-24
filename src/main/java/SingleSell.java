@@ -3,7 +3,6 @@ import calendar.NoneCalendar;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.List;
 
 public class SingleSell implements Sell {
     private final Item item;
@@ -36,17 +35,12 @@ public class SingleSell implements Sell {
     }
 
     public Fee fee(BlackDaysCalendar calendar) {
-        Rival policy = new FeeBasedOnDefault(this.item, this.shipment);
-        List<Rival> policies = Arrays.asList(
-            new FeeBasedOnCalendar(this.item, this.shipment, calendar ),
-            new FeeBasedOnItemPriceBiggerThan(this.item, this.shipment, 1000.0)
-        );
-
-        for(Rival r : policies) {
-            policy = policy.oust(r);
-        }
-
-        return policy.calculate();
+        return Arrays.asList(
+                new FeeBasedOnCalendar(this.item, this.shipment, calendar ),
+                new FeeBasedOnItemPriceBiggerThan(this.item, this.shipment, 1000.0)
+        ).stream()
+                .reduce(new FeeBasedOnDefault(this.item, this.shipment), (a, b) -> a = a.oust(b))
+                .calculate();
     }
 
     public PartialSell and(Item item) {

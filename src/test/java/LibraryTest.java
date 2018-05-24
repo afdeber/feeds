@@ -4,6 +4,8 @@
 import calendar.BlackDaysCalendar;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+
 import static org.junit.Assert.*;
 
 public class LibraryTest {
@@ -73,17 +75,30 @@ public class LibraryTest {
     }
 
     @Test
-    public void seller_does_2_sells_between_2_hours_and_is_charged_5_percent_less_each() {
+    public void seller_does_2_sells_within_2_hours_and_is_charged_5_percent_less_each() {
         Seller seller = new Seller();
+
         Sell s1 = seller.sells(new Item(200.0), new Shipment(200.0));
         Sell s2 = seller.sells(new Item(300.0), new Shipment(200.0), s1.sellingDate().plusHours(1).plusMinutes(21));
 
-        Promotion p = new Promotion(1L, 5.0, s1, s2);
+        Promotion p = new Promotion(2L, 5.0, s1, s2);
 
-        Fee f1 = p.fee();
-        Fee f2 = new Fee(31.5).percentage(95.0);
+        assertEquals(p.fee(), new Fee(31.5).percentage(95.0));
+    }
 
+    @Test
+    public void seller_does_6_sells_having_5_within_2_hours_of_difference_and_is_charged_5_percent_less_each() {
+        Seller seller = new Seller();
 
-        assertEquals(f1, f2);
+        Sell s1 = seller.sells(new Item(200.0), new Shipment(200.0));
+        Sell s2 = seller.sells(new Item(300.0), new Shipment(200.0), s1.sellingDate().plusHours(1).plusMinutes(21));
+        Sell s3 = seller.sells(new Item(2500.0), new Shipment(200.0), s2.sellingDate().plusHours(3));
+        Sell s4 = seller.sells(new Item(500.0), new Shipment(200.0), s3.sellingDate().plusHours(2).plusMinutes(7));
+        Sell s5 = seller.sells(new Item(100.0), new Shipment(200.0), s4.sellingDate().plusMinutes(34));
+        Sell s6 = seller.sells(new Item(110.0), new Shipment(200.0), s5.sellingDate().plusMinutes(47));
+
+        Promotion p = new Promotion(2L, 5.0, s5, s2, s4, s1, s6, s3);
+
+        assertEquals(p.fee(), new Fee(77.35).percentage(95.0));
     }
 }
